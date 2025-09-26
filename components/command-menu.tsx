@@ -8,13 +8,11 @@ import { CornerDownLeftIcon, SquareDashedIcon } from "lucide-react"
 
 import { type Color, type ColorPalette } from "@/lib/colors"
 import { showMcpDocs } from "@/lib/flags"
-import { source } from "@/lib/source"
 import { cn } from "@/lib/utils"
 import { useConfig } from "@/hooks/use-config"
 import { useIsMac } from "@/hooks/use-is-mac"
 import { useMutationObserver } from "@/hooks/use-mutation-observer"
-import { copyToClipboardWithMeta } from "@/components/copy-button"
-import { Button } from "@/registry/new-york-v4/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -22,7 +20,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/registry/new-york-v4/ui/command"
+} from "@/components/ui/command"
 import {
   Dialog,
   DialogContent,
@@ -30,8 +28,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/registry/new-york-v4/ui/dialog"
-import { Separator } from "@/registry/new-york-v4/ui/separator"
+} from "@/components/ui/dialog"
+import { Separator } from "@/components/ui/separator"
+import { copyToClipboardWithMeta } from "@/components/copy-button"
 
 export function CommandMenu({
   tree,
@@ -40,7 +39,7 @@ export function CommandMenu({
   navItems,
   ...props
 }: DialogProps & {
-  tree: typeof source.pageTree
+  tree: any // Simplified since we removed Fumadocs
   colors: ColorPalette[]
   blocks?: { name: string; description: string; categories: string[] }[]
   navItems?: { href: string; label: string }[]

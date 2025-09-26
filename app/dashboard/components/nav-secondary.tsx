@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { IconBrightness, type Icon } from "@tabler/icons-react"
+import { type Icon } from "@tabler/icons-react"
 import { useTheme } from "next-themes"
 
 import {
@@ -10,9 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/registry/new-york-v4/ui/sidebar"
-import { Skeleton } from "@/registry/new-york-v4/ui/skeleton"
-import { Switch } from "@/registry/new-york-v4/ui/switch"
+} from "@/components/ui/sidebar"
 
 export function NavSecondary({
   items,
@@ -45,25 +43,6 @@ export function NavSecondary({
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
-          <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">
-            <SidebarMenuButton asChild>
-              <label>
-                <IconBrightness />
-                <span>Dark Mode</span>
-                {mounted ? (
-                  <Switch
-                    className="ml-auto"
-                    checked={resolvedTheme !== "light"}
-                    onCheckedChange={() =>
-                      setTheme(resolvedTheme === "dark" ? "light" : "dark")
-                    }
-                  />
-                ) : (
-                  <Skeleton className="ml-auto h-4 w-8 rounded-full" />
-                )}
-              </label>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

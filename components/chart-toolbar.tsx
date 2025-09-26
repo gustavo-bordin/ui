@@ -11,10 +11,10 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Separator } from "@/components/ui/separator"
 import { ChartCodeViewer } from "@/components/chart-code-viewer"
 import { ChartCopyButton } from "@/components/chart-copy-button"
 import { Chart } from "@/components/chart-display"
-import { Separator } from "@/registry/new-york-v4/ui/separator"
 
 export function ChartToolbar({
   chart,

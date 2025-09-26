@@ -2,11 +2,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { ChartCopyButton } from "@/components/chart-copy-button"
-import { Chart } from "@/components/chart-display"
-import { getIconForLanguageExtension } from "@/components/icons"
-import { OpenInV0Button } from "@/components/open-in-v0-button"
-import { Button } from "@/registry/new-york-v4/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Drawer,
   DrawerContent,
@@ -14,7 +10,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/registry/new-york-v4/ui/drawer"
+} from "@/components/ui/drawer"
 import {
   Sheet,
   SheetContent,
@@ -22,7 +18,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/registry/new-york-v4/ui/sheet"
+} from "@/components/ui/sheet"
+import { ChartCopyButton } from "@/components/chart-copy-button"
+import { Chart } from "@/components/chart-display"
+import { getIconForLanguageExtension } from "@/components/icons"
+import { OpenInV0Button } from "@/components/open-in-v0-button"
 
 export function ChartCodeViewer({
   chart,

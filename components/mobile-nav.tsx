@@ -5,14 +5,13 @@ import Link, { LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 
 import { showMcpDocs } from "@/lib/flags"
-import { source } from "@/lib/source"
 import { cn } from "@/lib/utils"
-import { Button } from "@/registry/new-york-v4/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/registry/new-york-v4/ui/popover"
+} from "@/components/ui/popover"
 
 const TOP_LEVEL_SECTIONS = [
   { name: "Get Started", href: "/docs" },
@@ -39,7 +38,7 @@ export function MobileNav({
   items,
   className,
 }: {
-  tree: typeof source.pageTree
+  tree: any // Simplified since we removed Fumadocs
   items: { href: string; label: string }[]
   className?: string
 }) {

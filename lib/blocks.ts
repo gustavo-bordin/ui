@@ -22,7 +22,7 @@ export async function getAllBlocks(
   ],
   categories: string[] = []
 ) {
-  const { Index } = await import("@/registry/__index__")
+  const { Index } = await import("@/lib/registry-index")
   const index = z.record(registryItemSchema).parse(Index)
 
   return Object.values(index).filter(

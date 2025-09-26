@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
-import { useIsMobile } from "@/registry/new-york-v4/hooks/use-mobile"
+import { useIsMobile } from "@/hooks/use-mobile"
 import {
   Card,
   CardAction,
@@ -11,131 +11,128 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/registry/new-york-v4/ui/card"
+} from "@/components/ui/card"
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/registry/new-york-v4/ui/chart"
+} from "@/components/ui/chart"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/registry/new-york-v4/ui/select"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/registry/new-york-v4/ui/toggle-group"
+} from "@/components/ui/select"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 export const description = "An interactive area chart"
 
 const chartData = [
-  { date: "2024-04-01", desktop: 222, mobile: 150 },
-  { date: "2024-04-02", desktop: 97, mobile: 180 },
-  { date: "2024-04-03", desktop: 167, mobile: 120 },
-  { date: "2024-04-04", desktop: 242, mobile: 260 },
-  { date: "2024-04-05", desktop: 373, mobile: 290 },
-  { date: "2024-04-06", desktop: 301, mobile: 340 },
-  { date: "2024-04-07", desktop: 245, mobile: 180 },
-  { date: "2024-04-08", desktop: 409, mobile: 320 },
-  { date: "2024-04-09", desktop: 59, mobile: 110 },
-  { date: "2024-04-10", desktop: 261, mobile: 190 },
-  { date: "2024-04-11", desktop: 327, mobile: 350 },
-  { date: "2024-04-12", desktop: 292, mobile: 210 },
-  { date: "2024-04-13", desktop: 342, mobile: 380 },
-  { date: "2024-04-14", desktop: 137, mobile: 220 },
-  { date: "2024-04-15", desktop: 120, mobile: 170 },
-  { date: "2024-04-16", desktop: 138, mobile: 190 },
-  { date: "2024-04-17", desktop: 446, mobile: 360 },
-  { date: "2024-04-18", desktop: 364, mobile: 410 },
-  { date: "2024-04-19", desktop: 243, mobile: 180 },
-  { date: "2024-04-20", desktop: 89, mobile: 150 },
-  { date: "2024-04-21", desktop: 137, mobile: 200 },
-  { date: "2024-04-22", desktop: 224, mobile: 170 },
-  { date: "2024-04-23", desktop: 138, mobile: 230 },
-  { date: "2024-04-24", desktop: 387, mobile: 290 },
-  { date: "2024-04-25", desktop: 215, mobile: 250 },
-  { date: "2024-04-26", desktop: 75, mobile: 130 },
-  { date: "2024-04-27", desktop: 383, mobile: 420 },
-  { date: "2024-04-28", desktop: 122, mobile: 180 },
-  { date: "2024-04-29", desktop: 315, mobile: 240 },
-  { date: "2024-04-30", desktop: 454, mobile: 380 },
-  { date: "2024-05-01", desktop: 165, mobile: 220 },
-  { date: "2024-05-02", desktop: 293, mobile: 310 },
-  { date: "2024-05-03", desktop: 247, mobile: 190 },
-  { date: "2024-05-04", desktop: 385, mobile: 420 },
-  { date: "2024-05-05", desktop: 481, mobile: 390 },
-  { date: "2024-05-06", desktop: 498, mobile: 520 },
-  { date: "2024-05-07", desktop: 388, mobile: 300 },
-  { date: "2024-05-08", desktop: 149, mobile: 210 },
-  { date: "2024-05-09", desktop: 227, mobile: 180 },
-  { date: "2024-05-10", desktop: 293, mobile: 330 },
-  { date: "2024-05-11", desktop: 335, mobile: 270 },
-  { date: "2024-05-12", desktop: 197, mobile: 240 },
-  { date: "2024-05-13", desktop: 197, mobile: 160 },
-  { date: "2024-05-14", desktop: 448, mobile: 490 },
-  { date: "2024-05-15", desktop: 473, mobile: 380 },
-  { date: "2024-05-16", desktop: 338, mobile: 400 },
-  { date: "2024-05-17", desktop: 499, mobile: 420 },
-  { date: "2024-05-18", desktop: 315, mobile: 350 },
-  { date: "2024-05-19", desktop: 235, mobile: 180 },
-  { date: "2024-05-20", desktop: 177, mobile: 230 },
-  { date: "2024-05-21", desktop: 82, mobile: 140 },
-  { date: "2024-05-22", desktop: 81, mobile: 120 },
-  { date: "2024-05-23", desktop: 252, mobile: 290 },
-  { date: "2024-05-24", desktop: 294, mobile: 220 },
-  { date: "2024-05-25", desktop: 201, mobile: 250 },
-  { date: "2024-05-26", desktop: 213, mobile: 170 },
-  { date: "2024-05-27", desktop: 420, mobile: 460 },
-  { date: "2024-05-28", desktop: 233, mobile: 190 },
-  { date: "2024-05-29", desktop: 78, mobile: 130 },
-  { date: "2024-05-30", desktop: 340, mobile: 280 },
-  { date: "2024-05-31", desktop: 178, mobile: 230 },
-  { date: "2024-06-01", desktop: 178, mobile: 200 },
-  { date: "2024-06-02", desktop: 470, mobile: 410 },
-  { date: "2024-06-03", desktop: 103, mobile: 160 },
-  { date: "2024-06-04", desktop: 439, mobile: 380 },
-  { date: "2024-06-05", desktop: 88, mobile: 140 },
-  { date: "2024-06-06", desktop: 294, mobile: 250 },
-  { date: "2024-06-07", desktop: 323, mobile: 370 },
-  { date: "2024-06-08", desktop: 385, mobile: 320 },
-  { date: "2024-06-09", desktop: 438, mobile: 480 },
-  { date: "2024-06-10", desktop: 155, mobile: 200 },
-  { date: "2024-06-11", desktop: 92, mobile: 150 },
-  { date: "2024-06-12", desktop: 492, mobile: 420 },
-  { date: "2024-06-13", desktop: 81, mobile: 130 },
-  { date: "2024-06-14", desktop: 426, mobile: 380 },
-  { date: "2024-06-15", desktop: 307, mobile: 350 },
-  { date: "2024-06-16", desktop: 371, mobile: 310 },
-  { date: "2024-06-17", desktop: 475, mobile: 520 },
-  { date: "2024-06-18", desktop: 107, mobile: 170 },
-  { date: "2024-06-19", desktop: 341, mobile: 290 },
-  { date: "2024-06-20", desktop: 408, mobile: 450 },
-  { date: "2024-06-21", desktop: 169, mobile: 210 },
-  { date: "2024-06-22", desktop: 317, mobile: 270 },
-  { date: "2024-06-23", desktop: 480, mobile: 530 },
-  { date: "2024-06-24", desktop: 132, mobile: 180 },
-  { date: "2024-06-25", desktop: 141, mobile: 190 },
-  { date: "2024-06-26", desktop: 434, mobile: 380 },
-  { date: "2024-06-27", desktop: 448, mobile: 490 },
-  { date: "2024-06-28", desktop: 149, mobile: 200 },
-  { date: "2024-06-29", desktop: 103, mobile: 160 },
-  { date: "2024-06-30", desktop: 446, mobile: 400 },
+  { date: "2024-04-01", inflow: 222, outflow: 150 },
+  { date: "2024-04-02", inflow: 97, outflow: 180 },
+  { date: "2024-04-03", inflow: 167, outflow: 120 },
+  { date: "2024-04-04", inflow: 242, outflow: 260 },
+  { date: "2024-04-05", inflow: 373, outflow: 290 },
+  { date: "2024-04-06", inflow: 301, outflow: 340 },
+  { date: "2024-04-07", inflow: 245, outflow: 180 },
+  { date: "2024-04-08", inflow: 409, outflow: 320 },
+  { date: "2024-04-09", inflow: 59, outflow: 110 },
+  { date: "2024-04-10", inflow: 261, outflow: 190 },
+  { date: "2024-04-11", inflow: 327, outflow: 350 },
+  { date: "2024-04-12", inflow: 292, outflow: 210 },
+  { date: "2024-04-13", inflow: 342, outflow: 380 },
+  { date: "2024-04-14", inflow: 137, outflow: 220 },
+  { date: "2024-04-15", inflow: 120, outflow: 170 },
+  { date: "2024-04-16", inflow: 138, outflow: 190 },
+  { date: "2024-04-17", inflow: 446, outflow: 360 },
+  { date: "2024-04-18", inflow: 364, outflow: 410 },
+  { date: "2024-04-19", inflow: 243, outflow: 180 },
+  { date: "2024-04-20", inflow: 89, outflow: 150 },
+  { date: "2024-04-21", inflow: 137, outflow: 200 },
+  { date: "2024-04-22", inflow: 224, outflow: 170 },
+  { date: "2024-04-23", inflow: 138, outflow: 230 },
+  { date: "2024-04-24", inflow: 387, outflow: 290 },
+  { date: "2024-04-25", inflow: 215, outflow: 250 },
+  { date: "2024-04-26", inflow: 75, outflow: 130 },
+  { date: "2024-04-27", inflow: 383, outflow: 420 },
+  { date: "2024-04-28", inflow: 122, outflow: 180 },
+  { date: "2024-04-29", inflow: 315, outflow: 240 },
+  { date: "2024-04-30", inflow: 454, outflow: 380 },
+  { date: "2024-05-01", inflow: 165, outflow: 220 },
+  { date: "2024-05-02", inflow: 293, outflow: 310 },
+  { date: "2024-05-03", inflow: 247, outflow: 190 },
+  { date: "2024-05-04", inflow: 385, outflow: 420 },
+  { date: "2024-05-05", inflow: 481, outflow: 390 },
+  { date: "2024-05-06", inflow: 498, outflow: 520 },
+  { date: "2024-05-07", inflow: 388, outflow: 300 },
+  { date: "2024-05-08", inflow: 149, outflow: 210 },
+  { date: "2024-05-09", inflow: 227, outflow: 180 },
+  { date: "2024-05-10", inflow: 293, outflow: 330 },
+  { date: "2024-05-11", inflow: 335, outflow: 270 },
+  { date: "2024-05-12", inflow: 197, outflow: 240 },
+  { date: "2024-05-13", inflow: 197, outflow: 160 },
+  { date: "2024-05-14", inflow: 448, outflow: 490 },
+  { date: "2024-05-15", inflow: 473, outflow: 380 },
+  { date: "2024-05-16", inflow: 338, outflow: 400 },
+  { date: "2024-05-17", inflow: 499, outflow: 420 },
+  { date: "2024-05-18", inflow: 315, outflow: 350 },
+  { date: "2024-05-19", inflow: 235, outflow: 180 },
+  { date: "2024-05-20", inflow: 177, outflow: 230 },
+  { date: "2024-05-21", inflow: 82, outflow: 140 },
+  { date: "2024-05-22", inflow: 81, outflow: 120 },
+  { date: "2024-05-23", inflow: 252, outflow: 290 },
+  { date: "2024-05-24", inflow: 294, outflow: 220 },
+  { date: "2024-05-25", inflow: 201, outflow: 250 },
+  { date: "2024-05-26", inflow: 213, outflow: 170 },
+  { date: "2024-05-27", inflow: 420, outflow: 460 },
+  { date: "2024-05-28", inflow: 233, outflow: 190 },
+  { date: "2024-05-29", inflow: 78, outflow: 130 },
+  { date: "2024-05-30", inflow: 340, outflow: 280 },
+  { date: "2024-05-31", inflow: 178, outflow: 230 },
+  { date: "2024-06-01", inflow: 178, outflow: 200 },
+  { date: "2024-06-02", inflow: 470, outflow: 410 },
+  { date: "2024-06-03", inflow: 103, outflow: 160 },
+  { date: "2024-06-04", inflow: 439, outflow: 380 },
+  { date: "2024-06-05", inflow: 88, outflow: 140 },
+  { date: "2024-06-06", inflow: 294, outflow: 250 },
+  { date: "2024-06-07", inflow: 323, outflow: 370 },
+  { date: "2024-06-08", inflow: 385, outflow: 320 },
+  { date: "2024-06-09", inflow: 438, outflow: 480 },
+  { date: "2024-06-10", inflow: 155, outflow: 200 },
+  { date: "2024-06-11", inflow: 92, outflow: 150 },
+  { date: "2024-06-12", inflow: 492, outflow: 420 },
+  { date: "2024-06-13", inflow: 81, outflow: 130 },
+  { date: "2024-06-14", inflow: 426, outflow: 380 },
+  { date: "2024-06-15", inflow: 307, outflow: 350 },
+  { date: "2024-06-16", inflow: 371, outflow: 310 },
+  { date: "2024-06-17", inflow: 475, outflow: 520 },
+  { date: "2024-06-18", inflow: 107, outflow: 170 },
+  { date: "2024-06-19", inflow: 341, outflow: 290 },
+  { date: "2024-06-20", inflow: 408, outflow: 450 },
+  { date: "2024-06-21", inflow: 169, outflow: 210 },
+  { date: "2024-06-22", inflow: 317, outflow: 270 },
+  { date: "2024-06-23", inflow: 480, outflow: 530 },
+  { date: "2024-06-24", inflow: 132, outflow: 180 },
+  { date: "2024-06-25", inflow: 141, outflow: 190 },
+  { date: "2024-06-26", inflow: 434, outflow: 380 },
+  { date: "2024-06-27", inflow: 448, outflow: 490 },
+  { date: "2024-06-28", inflow: 149, outflow: 200 },
+  { date: "2024-06-29", inflow: 103, outflow: 160 },
+  { date: "2024-06-30", inflow: 446, outflow: 400 },
 ]
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  transactions: {
+    label: "Transações",
   },
-  desktop: {
-    label: "Desktop",
+  inflow: {
+    label: "Entrada",
     color: "var(--primary)",
   },
-  mobile: {
-    label: "Mobile",
+  outflow: {
+    label: "Saída",
     color: "var(--primary)",
   },
 } satisfies ChartConfig
@@ -167,12 +164,12 @@ export function ChartAreaInteractive() {
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle>Total Visitors</CardTitle>
+        <CardTitle>Total de Transações</CardTitle>
         <CardDescription>
           <span className="hidden @[540px]/card:block">
-            Total for the last 3 months
+            Total dos últimos 3 meses
           </span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
+          <span className="@[540px]/card:hidden">Últimos 3 meses</span>
         </CardDescription>
         <CardAction>
           <ToggleGroup
@@ -182,9 +179,9 @@ export function ChartAreaInteractive() {
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
           >
-            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+            <ToggleGroupItem value="90d">Últimos 3 meses</ToggleGroupItem>
+            <ToggleGroupItem value="30d">Últimos 30 dias</ToggleGroupItem>
+            <ToggleGroupItem value="7d">Últimos 7 dias</ToggleGroupItem>
           </ToggleGroup>
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
@@ -192,17 +189,17 @@ export function ChartAreaInteractive() {
               size="sm"
               aria-label="Select a value"
             >
-              <SelectValue placeholder="Last 3 months" />
+              <SelectValue placeholder="Últimos 3 meses" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
               <SelectItem value="90d" className="rounded-lg">
-                Last 3 months
+                Últimos 3 meses
               </SelectItem>
               <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
+                Últimos 30 dias
               </SelectItem>
               <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
+                Últimos 7 dias
               </SelectItem>
             </SelectContent>
           </Select>
@@ -215,27 +212,27 @@ export function ChartAreaInteractive() {
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillInflow" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-desktop)"
+                  stopColor="var(--color-inflow)"
                   stopOpacity={1.0}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-desktop)"
+                  stopColor="var(--color-inflow)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillOutflow" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-outflow)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-outflow)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -271,17 +268,17 @@ export function ChartAreaInteractive() {
               }
             />
             <Area
-              dataKey="mobile"
+              dataKey="outflow"
               type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
+              fill="url(#fillOutflow)"
+              stroke="var(--color-outflow)"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="inflow"
               type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
+              fill="url(#fillInflow)"
+              stroke="var(--color-inflow)"
               stackId="a"
             />
           </AreaChart>

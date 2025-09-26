@@ -2,7 +2,8 @@ import Link from "next/link"
 
 import { getColors } from "@/lib/colors"
 import { siteConfig } from "@/lib/config"
-import { source } from "@/lib/source"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import { CommandMenu } from "@/components/command-menu"
 import { GitHubLink } from "@/components/github-link"
 import { Icons } from "@/components/icons"
@@ -10,12 +11,10 @@ import { MainNav } from "@/components/main-nav"
 import { MobileNav } from "@/components/mobile-nav"
 import { ModeSwitcher } from "@/components/mode-switcher"
 import { SiteConfig } from "@/components/site-config"
-import { Button } from "@/registry/new-york-v4/ui/button"
-import { Separator } from "@/registry/new-york-v4/ui/separator"
 
 export function SiteHeader() {
   const colors = getColors()
-  const pageTree = source.pageTree
+  const pageTree = null // Simplified since we removed Fumadocs
 
   return (
     <header className="bg-background sticky top-0 z-50 w-full">
