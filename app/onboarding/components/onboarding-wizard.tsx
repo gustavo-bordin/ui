@@ -2,17 +2,8 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { Check, ChevronRight } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-
+import { CpfCollectionStep } from "./cpf-collection-step"
 import { OpenFinanceConnectionStep } from "./openfinance-connection-step"
 import { UserGoalsStep } from "./user-goals-step"
 import { WelcomeStep } from "./welcome-step"
@@ -37,15 +28,15 @@ const ONBOARDING_STEPS = [
   },
   {
     id: 3,
-    title: "Conectar Conta",
-    description: "Conecte sua conta bancária",
-    component: OpenFinanceConnectionStep,
+    title: "CPF",
+    description: "Informe seu CPF para Open Finance",
+    component: CpfCollectionStep,
   },
   {
     id: 4,
-    title: "Concluído!",
-    description: "Tudo pronto para começar",
-    component: null,
+    title: "Conectar Conta",
+    description: "Conecte sua conta bancária com Open Finance",
+    component: OpenFinanceConnectionStep,
   },
 ]
 
@@ -65,7 +56,7 @@ export function OnboardingWizard({
     if (stepId < ONBOARDING_STEPS.length) {
       setCurrentStep(stepId + 1)
     } else {
-      // Mark onboarding as complete
+      // Mark onboarding as complete and redirect to dashboard
       markOnboardingComplete()
       onComplete()
     }
@@ -82,10 +73,21 @@ export function OnboardingWizard({
       })
 
       if (!response.ok) {
-        throw new Error("Failed to mark onboarding complete")
+        const errorData = await response.json().catch(() => ({}))
+        console.error("API Error:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData
+        })
+        throw new Error(`Failed to mark onboarding complete: ${errorData.error || response.statusText}`)
       }
+
+      const result = await response.json()
+      console.log("Onboarding marked complete successfully:", result)
     } catch (error) {
       console.error("Error marking onboarding complete:", error)
+      // Don't throw the error to prevent blocking the user flow
+      // The user can still proceed to dashboard even if this fails
     }
   }
 
@@ -103,33 +105,6 @@ export function OnboardingWizard({
   )
   const CurrentComponent = currentStepData?.component
 
-  if (currentStep === 4) {
-    return (
-      <div className="bg-background flex min-h-screen items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-              <Check className="h-6 w-6 text-green-600 dark:text-green-400" />
-            </div>
-            <CardTitle className="text-2xl">Parabéns!</CardTitle>
-            <CardDescription>
-              Sua conta está configurada e pronta para uso
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="text-muted-foreground text-center text-sm">
-              Agora você pode começar a acompanhar suas finanças e alcançar seus
-              objetivos.
-            </div>
-            <Button onClick={onComplete} className="w-full" size="lg">
-              Ir para o Dashboard
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
 
   return (
     <div className="bg-background min-h-screen">

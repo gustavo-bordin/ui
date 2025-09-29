@@ -37,31 +37,86 @@ export function OpenFinanceConnectionStep({
     setConnectionStatus("connecting")
 
     try {
-      // Simulate OpenFinance connection process
-      // In a real implementation, this would redirect to OpenFinance OAuth
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      // Get user's CPF from the database first
+      const cpfResponse = await fetch(`/api/onboarding/cpf?userId=${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
 
-      // Mock successful connection
-      setConnectionStatus("success")
+      if (!cpfResponse.ok) {
+        throw new Error("CPF não encontrado. Por favor, volte e informe seu CPF.")
+      }
 
-      // Update user onboarding status
-      await fetch("/api/onboarding/openfinance", {
+      const { cpf } = await cpfResponse.json()
+
+      // Generate Belvo access token with user's CPF
+      const tokenResponse = await fetch("/api/belvo/token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userId,
-          connected: true,
+          cpf,
         }),
       })
 
-      // Auto-proceed after success
-      setTimeout(() => {
-        onComplete()
-      }, 1500)
+      if (!tokenResponse.ok) {
+        throw new Error("Erro ao gerar token de acesso")
+      }
+
+      const { access_token } = await tokenResponse.json()
+
+      // Launch Belvo widget in a new window/webview
+      const widgetUrl = `https://widget.belvo.io/?access_token=${access_token}`
+
+      // For web implementation, open in a popup
+      const popup = window.open(
+        widgetUrl,
+        'belvo-widget',
+        'width=500,height=700,scrollbars=yes,resizable=yes'
+      )
+
+      // Listen for the popup to close (indicating completion)
+      const checkClosed = setInterval(() => {
+        if (popup?.closed) {
+          clearInterval(checkClosed)
+          // Check if connection was successful
+          checkConnectionStatus()
+        }
+      }, 1000)
+
     } catch (error) {
       console.error("Error connecting to OpenFinance:", error)
+      setConnectionStatus("error")
+      setIsConnecting(false)
+    }
+  }
+
+  const checkConnectionStatus = async () => {
+    try {
+      // Check if the connection was successful
+      const statusResponse = await fetch(`/api/onboarding/openfinance/status?userId=${userId}`)
+
+      if (statusResponse.ok) {
+        const { connected } = await statusResponse.json()
+
+        if (connected) {
+          setConnectionStatus("success")
+          // Auto-proceed after success
+          setTimeout(() => {
+            onComplete()
+          }, 1500)
+        } else {
+          setConnectionStatus("error")
+        }
+      } else {
+        setConnectionStatus("error")
+      }
+    } catch (error) {
+      console.error("Error checking connection status:", error)
       setConnectionStatus("error")
     } finally {
       setIsConnecting(false)
@@ -90,40 +145,44 @@ export function OpenFinanceConnectionStep({
           }`}
         >
           <h2 className="mb-6 text-2xl leading-tight font-light text-white">
-            Conecte sua Conta Bancária
+            Conecte sua Conta Bancária com Open Finance
           </h2>
-          <p className="text-base text-gray-300">
-            Conecte-se com OpenFinance para sincronizar suas transações
-            automaticamente
-          </p>
+
         </div>
 
         {/* Benefits */}
         <div
-          className={`mb-8 space-y-4 transition-all delay-300 duration-500 ${
+          className={`mb-8 transition-all delay-300 duration-500 ${
             showContent
               ? "translate-y-0 opacity-100"
               : "translate-y-4 opacity-0"
           }`}
         >
           <div className="space-y-3">
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="h-5 w-5 text-white/60" />
-              <span className="text-sm text-gray-300">
-                Sincronização automática
-              </span>
+            <div className="group relative overflow-hidden rounded-xl border border-white/5 bg-gradient-to-r from-white/5 to-white/[0.02] p-4 backdrop-blur-sm transition-all duration-300 hover:border-white/10 hover:bg-white/[0.08]">
+              <div className="absolute inset-0 bg-gradient-to-r from-white/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="relative flex items-center space-x-3">
+                <div className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                <span className="text-sm font-medium text-white/90">Sincronização automática</span>
+              </div>
             </div>
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="h-5 w-5 text-white/60" />
-              <span className="text-sm text-gray-300">Segurança garantida</span>
+
+
+
+            <div className="group relative overflow-hidden rounded-xl border border-white/5 bg-gradient-to-r from-white/5 to-white/[0.02] p-4 backdrop-blur-sm transition-all duration-300 hover:border-white/10 hover:bg-white/[0.08]">
+              <div className="absolute inset-0 bg-gradient-to-r from-white/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="relative flex items-center space-x-3">
+                <div className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                <span className="text-sm font-medium text-white/90">Múltiplas contas</span>
+              </div>
             </div>
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="h-5 w-5 text-white/60" />
-              <span className="text-sm text-gray-300">Múltiplas contas</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="h-5 w-5 text-white/60" />
-              <span className="text-sm text-gray-300">Análise completa</span>
+
+            <div className="group relative overflow-hidden rounded-xl border border-white/5 bg-gradient-to-r from-white/5 to-white/[0.02] p-4 backdrop-blur-sm transition-all duration-300 hover:border-white/10 hover:bg-white/[0.08]">
+              <div className="absolute inset-0 bg-gradient-to-r from-white/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="relative flex items-center space-x-3">
+                <div className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                <span className="text-sm font-medium text-white/90">Análise completa</span>
+              </div>
             </div>
           </div>
         </div>
@@ -234,10 +293,7 @@ export function OpenFinanceConnectionStep({
               : "translate-y-4 opacity-0"
           }`}
         >
-          <p className="text-xs text-gray-500">
-            Você pode conectar sua conta bancária a qualquer momento nas
-            configurações.
-          </p>
+
         </div>
       </div>
     </div>
