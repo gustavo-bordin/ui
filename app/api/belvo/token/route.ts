@@ -1,99 +1,75 @@
 import { NextRequest, NextResponse } from "next/server"
 
-import { createClient } from "@/lib/supabase-server"
-
 export async function POST(request: NextRequest) {
   try {
-    const { userId, cpf } = await request.json()
+    const { cpf } = await request.json()
 
-    if (!userId || !cpf) {
-      return NextResponse.json(
-        { error: "Missing userId or cpf" },
-        { status: 400 }
-      )
-    }
-
-    const supabase = createClient()
-
-    // Verify user authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
-    if (authError || !user) {
-      console.error("Authentication error:", authError)
-      return NextResponse.json(
-        { error: "User not authenticated" },
-        { status: 401 }
-      )
-    }
-
-    // Ensure the authenticated user matches the userId
-    if (user.id !== userId) {
-      return NextResponse.json(
-        { error: "Unauthorized: User ID mismatch" },
-        { status: 403 }
-      )
-    }
-
-    // Generate Belvo access token
-    const belvoResponse = await fetch('https://sandbox.belvo.com/api/token/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const url = `${process.env.BELVO_BASE_URL}${process.env.BELVO_ACCESS_TOKEN_ENDPOINT}`
+    const payload = {
+      id: process.env.BELVO_SECRET_ID,
+      password: process.env.BELVO_SECRET_PASSWORD,
+      scopes:
+        "read_institutions,write_links,read_consents,write_consents,write_consent_callback,delete_consents",
+      stale_in: "300d",
+      fetch_resources: ["ACCOUNTS", "TRANSACTIONS", "OWNERS"],
+      widget: {
+        purpose:
+          "Soluções financeiras personalizadas oferecidas por meio de recomendações sob medida, visando melhores ofertas de produtos financeiros e de crédito.",
+        openfinance_feature: "consent_link_creation",
+        callback_urls: {
+          success: `${process.env.NEXT_PUBLIC_APP_URL}/api/belvo/callback/success`,
+          exit: `${process.env.NEXT_PUBLIC_APP_URL}/api/belvo/callback/exit`,
+          event: `${process.env.NEXT_PUBLIC_APP_URL}/api/belvo/callback/error`,
+        },
+        consent: {
+          terms_and_conditions_url: `${process.env.NEXT_PUBLIC_APP_URL}/terms`,
+          permissions: [
+            "REGISTER",
+            "ACCOUNTS",
+            "CREDIT_CARDS",
+            "CREDIT_OPERATIONS",
+          ],
+          identification_info: [
+            {
+              type: "CPF",
+              number: process.env.BELVO_TEST_USER_CPF ?? cpf,
+              name: process.env.BELVO_TEST_USER_NAME ?? "Ralph Bragg",
+            },
+          ],
+        },
       },
-      body: JSON.stringify({
-        id: process.env.BELVO_SECRET_ID,
-        password: process.env.BELVO_SECRET_PASSWORD,
-        scopes: "read_institutions,write_links,read_consents,write_consents,write_consent_callback,delete_consents",
-        stale_in: "300d",
-        fetch_resources: ["ACCOUNTS", "TRANSACTIONS", "OWNERS", "BILLS", "INVESTMENTS", "INVESTMENT_TRANSACTIONS"],
-        external_id: userId, // This will be used to identify the user in webhooks
-        widget: {
-          purpose: "Soluções financeiras personalizadas oferecidas por meio de recomendações sob medida, visando melhores ofertas de produtos financeiros e de crédito.",
-          openfinance_feature: "consent_link_creation",
-          callback_urls: {
-            success: `${process.env.NEXT_PUBLIC_APP_URL}/onboarding/success`,
-            exit: `${process.env.NEXT_PUBLIC_APP_URL}/onboarding/exit`,
-            event: `${process.env.NEXT_PUBLIC_APP_URL}/onboarding/error`
-          },
-          consent: {
-            terms_and_conditions_url: `${process.env.NEXT_PUBLIC_APP_URL}/terms`,
-            permissions: ["REGISTER", "ACCOUNTS", "CREDIT_CARDS", "CREDIT_OPERATIONS"],
-            identification_info: [
-              {
-                type: "CPF",
-                number: cpf,
-                name: user.user_metadata?.full_name || "Usuario"
-              }
-            ]
-          },
-          branding: {
-            company_name: "Sua Aplicação",
-            overlay_background_color: "#000000",
-            social_proof: true
-          },
-          theme: []
-        }
-      })
+    }
+
+    const belvoResponse = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${Buffer.from(`${process.env.BELVO_SECRET_ID}:${process.env.BELVO_SECRET_PASSWORD}`).toString("base64")}`,
+      },
+      body: JSON.stringify(payload),
     })
 
     if (!belvoResponse.ok) {
       const errorData = await belvoResponse.json().catch(() => ({}))
-      console.error("Belvo API Error:", errorData)
+
+      console.error("Belvo API Error:", {
+        status: belvoResponse.status,
+        statusText: belvoResponse.statusText,
+        error: errorData,
+      })
+
       return NextResponse.json(
-        { error: "Failed to generate Belvo token", details: errorData },
-        { status: 500 }
+        { error: "Error from Belvo token API", details: errorData },
+        { status: belvoResponse.status }
       )
     }
 
     const tokenData = await belvoResponse.json()
-
-    return NextResponse.json({ 
-      access_token: tokenData.access_token,
-      expires_in: tokenData.expires_in 
+    return NextResponse.json({
+      access_token: tokenData.access,
+      refresh_token: tokenData.refresh,
     })
-
   } catch (error) {
-    console.error("Error in Belvo token API:", error)
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

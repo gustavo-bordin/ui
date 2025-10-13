@@ -34,7 +34,7 @@ export function NavUser() {
 
   const handleSignOut = async () => {
     await signOut()
-    router.push("/auth")
+    router.push("/auth/login")
   }
 
   // Show loading state or fallback if no user

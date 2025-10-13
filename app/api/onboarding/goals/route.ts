@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Define question mappings for better data structure
     const questionMappings: Record<
@@ -73,6 +73,25 @@ export async function POST(request: NextRequest) {
         { error: "Failed to save answers" },
         { status: 500 }
       )
+    }
+
+    // Update current_step to 3 (step 2 completed, moving to step 3)
+    const { error: onboardingError } = await supabase
+      .from("user_onboarding")
+      .upsert(
+        {
+          user_id: userId,
+          current_step: 3,
+          updated_at: new Date().toISOString(),
+        },
+        {
+          onConflict: "user_id",
+        }
+      )
+
+    if (onboardingError) {
+      console.error("Error updating onboarding step:", onboardingError)
+      // Don't fail the request, just log the error
     }
 
     return NextResponse.json({ success: true, data })

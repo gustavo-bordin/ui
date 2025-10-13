@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { IconPlus } from "@tabler/icons-react"
+import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -17,38 +18,91 @@ import {
 import { Label } from "@/components/ui/label"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
-// Mock data for institutions - in a real app, this would come from an API
-const AVAILABLE_INSTITUTIONS = [
-  { id: "itau", name: "Itaú", logo: "🏦" },
-  { id: "bradesco", name: "Bradesco", logo: "🏛️" },
-  { id: "santander", name: "Santander", logo: "🏢" },
-  { id: "nubank", name: "Nubank", logo: "💳" },
-  { id: "inter", name: "Inter", logo: "🌐" },
-  { id: "caixa", name: "Caixa", logo: "🏛️" },
-]
+// Bank connection type from API
+interface BankConnection {
+  id: string
+  user_id: string
+  link_id: string
+  institution: string
+  status: string
+  connected_at: string
+  last_sync_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+// Map Belvo institution IDs to display names and logos
+const INSTITUTION_MAP: Record<string, { name: string; logo: string }> = {
+  ofnubank_br_retail: { name: "Nubank", logo: "🟣" },
+  ofsantander_br_retail: { name: "Santander", logo: "🔴" },
+  ofitau_br_retail: { name: "Itaú", logo: "🟠" },
+  ofbradesco_br_retail: { name: "Bradesco", logo: "🔵" },
+  ofbanco_do_brasil_br_retail: { name: "Banco do Brasil", logo: "🟡" },
+  ofcaixa_br_retail: { name: "Caixa", logo: "🔵" },
+  ofmercadopago_br_retail: { name: "MercadoPago", logo: "💙" },
+  ofpicpay_br_retail: { name: "PicPay", logo: "🟢" },
+  ofsicredi_br_retail: { name: "Sicredi", logo: "🟠" },
+  ofsicoob_br_retail: { name: "Sicoob", logo: "🔵" },
+  ofbanco_pan_br_retail: { name: "Banco Pan", logo: "🟣" },
+  ofbanco_do_nordeste_br_retail: { name: "Banco do Nordeste", logo: "🟡" },
+  ofbanco_bmg_br_retail: { name: "Banco BMG", logo: "🟤" },
+}
 
 export function InstitutionSelector() {
-  const [connectedInstitutions, setConnectedInstitutions] = React.useState<
-    string[]
-  >(["itau", "bradesco", "nubank"])
+  const [bankConnections, setBankConnections] = React.useState<
+    BankConnection[]
+  >([])
   const [selectedInstitutions, setSelectedInstitutions] = React.useState<
     string[]
-  >(["itau", "bradesco"])
+  >([])
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
 
-  const handleInstitutionToggle = (institutionId: string) => {
+  // Fetch bank connections on mount
+  React.useEffect(() => {
+    const fetchConnections = async () => {
+      try {
+        const response = await fetch("/api/bank-connections")
+        if (!response.ok) throw new Error("Failed to fetch connections")
+
+        const data = await response.json()
+        setBankConnections(data.connections || [])
+
+        // Select all active connections by default
+        const activeIds = (data.connections || [])
+          .filter((conn: BankConnection) => conn.status === "active")
+          .map((conn: BankConnection) => conn.id)
+        setSelectedInstitutions(activeIds)
+      } catch (error) {
+        console.error("Error fetching bank connections:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchConnections()
+  }, [])
+
+  const handleInstitutionToggle = (connectionId: string) => {
     setSelectedInstitutions((prev) =>
-      prev.includes(institutionId)
-        ? prev.filter((id) => id !== institutionId)
-        : [...prev, institutionId]
+      prev.includes(connectionId)
+        ? prev.filter((id) => id !== connectionId)
+        : [...prev, connectionId]
     )
   }
 
-  const handleConnectInstitution = (institutionId: string) => {
-    if (!connectedInstitutions.includes(institutionId)) {
-      setConnectedInstitutions((prev) => [...prev, institutionId])
-      setSelectedInstitutions((prev) => [...prev, institutionId])
-    }
+  const getInstitutionDisplay = (institutionId: string) => {
+    return (
+      INSTITUTION_MAP[institutionId] || {
+        name: institutionId,
+        logo: "🏦",
+      }
+    )
+  }
+
+  const isSyncing = (connection: BankConnection) => {
+    // If last_sync_at is null, the webhook hasn't completed yet
+    return !connection.last_sync_at
   }
 
   return (
@@ -58,66 +112,85 @@ export function InstitutionSelector() {
       </Label>
 
       {/* Institution Toggle Buttons */}
-      <ToggleGroup
-        type="multiple"
-        value={selectedInstitutions}
-        onValueChange={setSelectedInstitutions}
-        variant="outline"
-        size="sm"
-        className="hidden sm:flex"
-      >
-        {connectedInstitutions.map((institutionId) => {
-          const institution = AVAILABLE_INSTITUTIONS.find(
-            (inst) => inst.id === institutionId
-          )
-          if (!institution) return null
+      {isLoading ? (
+        <div className="text-muted-foreground flex items-center gap-2 text-sm">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span>Carregando...</span>
+        </div>
+      ) : (
+        <ToggleGroup
+          type="multiple"
+          value={selectedInstitutions}
+          onValueChange={setSelectedInstitutions}
+          variant="outline"
+          size="sm"
+          className="hidden sm:flex"
+        >
+          {bankConnections.map((connection) => {
+            const institution = getInstitutionDisplay(connection.institution)
+            const syncing = isSyncing(connection)
 
-          return (
-            <ToggleGroupItem
-              key={institutionId}
-              value={institutionId}
-              className="flex cursor-pointer items-center gap-1.5 px-5"
-            >
-              <span className="text-sm font-medium">{institution.name}</span>
-            </ToggleGroupItem>
-          )
-        })}
-      </ToggleGroup>
+            return (
+              <ToggleGroupItem
+                key={connection.id}
+                value={connection.id}
+                className="flex cursor-pointer items-center gap-1.5 px-5"
+                disabled={syncing}
+              >
+                {syncing ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <span>{institution.logo}</span>
+                )}
+                <span className="text-sm font-medium">
+                  {institution.name}
+                  {syncing && " (sincronizando...)"}
+                </span>
+              </ToggleGroupItem>
+            )
+          })}
+        </ToggleGroup>
+      )}
 
       {/* Mobile version - compact toggle */}
-      <ToggleGroup
-        type="multiple"
-        value={selectedInstitutions}
-        onValueChange={setSelectedInstitutions}
-        variant="outline"
-        size="sm"
-        className="flex sm:hidden"
-      >
-        {connectedInstitutions.slice(0, 2).map((institutionId) => {
-          const institution = AVAILABLE_INSTITUTIONS.find(
-            (inst) => inst.id === institutionId
-          )
-          if (!institution) return null
+      {!isLoading && (
+        <ToggleGroup
+          type="multiple"
+          value={selectedInstitutions}
+          onValueChange={setSelectedInstitutions}
+          variant="outline"
+          size="sm"
+          className="flex sm:hidden"
+        >
+          {bankConnections.slice(0, 2).map((connection) => {
+            const institution = getInstitutionDisplay(connection.institution)
+            const syncing = isSyncing(connection)
 
-          return (
-            <ToggleGroupItem
-              key={institutionId}
-              value={institutionId}
-              className="flex cursor-pointer items-center gap-1 px-3"
-            >
-              <span className="text-xs">{institution.logo}</span>
-              <span className="text-xs font-medium">
-                {institution.name.slice(0, 3)}
-              </span>
+            return (
+              <ToggleGroupItem
+                key={connection.id}
+                value={connection.id}
+                className="flex cursor-pointer items-center gap-1 px-3"
+                disabled={syncing}
+              >
+                {syncing ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <span className="text-xs">{institution.logo}</span>
+                )}
+                <span className="text-xs font-medium">
+                  {institution.name.slice(0, 3)}
+                </span>
+              </ToggleGroupItem>
+            )
+          })}
+          {bankConnections.length > 2 && (
+            <ToggleGroupItem value="more" className="px-2 text-xs" disabled>
+              +{bankConnections.length - 2}
             </ToggleGroupItem>
-          )
-        })}
-        {connectedInstitutions.length > 2 && (
-          <ToggleGroupItem value="more" className="px-2 text-xs" disabled>
-            +{connectedInstitutions.length - 2}
-          </ToggleGroupItem>
-        )}
-      </ToggleGroup>
+          )}
+        </ToggleGroup>
+      )}
 
       {/* Connect Button */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -146,54 +219,52 @@ export function InstitutionSelector() {
                 Instituições Conectadas
               </Label>
               <div className="mt-2 space-y-2">
-                {connectedInstitutions.map((institutionId) => {
-                  const institution = AVAILABLE_INSTITUTIONS.find(
-                    (inst) => inst.id === institutionId
-                  )
-                  if (!institution) return null
-                  return (
-                    <div
-                      key={institutionId}
-                      className="flex items-center space-x-2"
-                    >
-                      <Checkbox
-                        id={institutionId}
-                        checked={selectedInstitutions.includes(institutionId)}
-                        onCheckedChange={() =>
-                          handleInstitutionToggle(institutionId)
-                        }
-                      />
-                      <Label
-                        htmlFor={institutionId}
-                        className="flex flex-1 cursor-pointer items-center gap-2"
+                {bankConnections.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">
+                    Nenhuma instituição conectada ainda.
+                  </p>
+                ) : (
+                  bankConnections.map((connection) => {
+                    const institution = getInstitutionDisplay(
+                      connection.institution
+                    )
+                    const syncing = isSyncing(connection)
+
+                    return (
+                      <div
+                        key={connection.id}
+                        className="flex items-center space-x-2"
                       >
-                        <span>{institution.logo}</span>
-                        <span>{institution.name}</span>
-                      </Label>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-            <div>
-              <Label className="text-sm font-medium">
-                Conectar Nova Instituição
-              </Label>
-              <div className="mt-2 space-y-2">
-                {AVAILABLE_INSTITUTIONS.filter(
-                  (inst) => !connectedInstitutions.includes(inst.id)
-                ).map((institution) => (
-                  <Button
-                    key={institution.id}
-                    variant="outline"
-                    className="w-full justify-start"
-                    onClick={() => handleConnectInstitution(institution.id)}
-                  >
-                    <span className="mr-2">{institution.logo}</span>
-                    <span>{institution.name}</span>
-                    <IconPlus className="ml-auto size-4" />
-                  </Button>
-                ))}
+                        <Checkbox
+                          id={connection.id}
+                          checked={selectedInstitutions.includes(connection.id)}
+                          onCheckedChange={() =>
+                            handleInstitutionToggle(connection.id)
+                          }
+                          disabled={syncing}
+                        />
+                        <Label
+                          htmlFor={connection.id}
+                          className="flex flex-1 cursor-pointer items-center gap-2"
+                        >
+                          {syncing ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <span>{institution.logo}</span>
+                          )}
+                          <span>
+                            {institution.name}
+                            {syncing && (
+                              <span className="text-muted-foreground ml-2 text-xs">
+                                (sincronizando dados...)
+                              </span>
+                            )}
+                          </span>
+                        </Label>
+                      </div>
+                    )
+                  })
+                )}
               </div>
             </div>
           </div>

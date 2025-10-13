@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const next = searchParams.get("next") ?? "/dashboard"
 
   if (code) {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error && data.user) {
@@ -20,10 +20,11 @@ export async function GET(request: NextRequest) {
         .from("user_onboarding")
         .select("has_completed_onboarding")
         .eq("user_id", data.user.id)
-        .single()
+        .maybeSingle()
 
-      // If user hasn't completed onboarding, redirect to onboarding
-      if (!onboardingData?.has_completed_onboarding) {
+      // If user hasn't completed onboarding or no record exists, redirect to onboarding
+      // This ensures all new accounts (email confirmations, OAuth) go through onboarding
+      if (!onboardingData || !onboardingData.has_completed_onboarding) {
         return NextResponse.redirect(`${origin}/onboarding`)
       }
 

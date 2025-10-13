@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { BarChart3, Shield, Zap } from "lucide-react"
 
-import { UserAuthForm } from "@/components/user-auth-form"
+import { UserLoginForm } from "@/components/user-login-form"
 
 const testimonials = [
   {
@@ -79,7 +79,7 @@ const testimonials = [
   },
 ]
 
-export default function AuthenticationPage() {
+export default function LoginPage() {
   const [showContent, setShowContent] = React.useState(false)
   const [randomTestimonial, setRandomTestimonial] = React.useState(
     testimonials[0]
@@ -111,33 +111,105 @@ export default function AuthenticationPage() {
           className="h-7 w-auto"
         />
         <div className="text-sm text-white">
-          <span className="font-light">Tem uma conta?</span>{" "}
+          <span className="font-light">Não tem conta?</span>{" "}
           <Link
-            href="/auth/login"
+            href="/auth"
             className="font-semibold transition-colors hover:text-gray-300"
           >
-            Entrar
+            Criar
           </Link>
         </div>
       </div>
 
-      {/* Left side - Black with logo */}
-      <div className="relative hidden w-1/2 overflow-hidden rounded-r-[3rem] bg-black lg:flex lg:flex-col lg:px-16 lg:py-16">
+      {/* Left side - White with form */}
+      <div className="relative flex w-full flex-1 items-center justify-center bg-white p-8 lg:order-1 lg:w-1/2 lg:px-16 lg:py-16">
+        {/* Top left signup link - Desktop only */}
+        <div className="absolute top-16 left-16 hidden lg:block">
+          <p className="text-sm font-light text-gray-600">
+            Não tem uma conta?{" "}
+            <Link
+              href="/auth"
+              className="font-normal text-black underline underline-offset-4 transition-colors hover:text-gray-700"
+            >
+              Criar conta
+            </Link>
+          </p>
+        </div>
+
+        <div className="w-full max-w-md">
+          <div
+            className={`transition-all duration-700 ${
+              showContent
+                ? "translate-y-0 opacity-100"
+                : "translate-y-4 opacity-0"
+            }`}
+          >
+            {/* Header */}
+            <div className="mb-8 text-center">
+              <h1
+                className="mb-4 text-4xl font-light tracking-tight text-black"
+                style={{
+                  fontFamily:
+                    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                  fontWeight: 400,
+                }}
+              >
+                Entrar na sua conta
+              </h1>
+              <p
+                className="text-base font-light text-gray-600"
+                style={{
+                  fontFamily:
+                    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                  fontWeight: 300,
+                }}
+              >
+                Digite seu email e senha para entrar
+              </p>
+            </div>
+
+            {/* Login Form */}
+            <UserLoginForm />
+
+            {/* Terms */}
+            <p className="mt-8 text-center text-sm font-light text-gray-500">
+              Ao continuar, você concorda com nossos{" "}
+              <Link
+                href="/terms"
+                className="text-gray-700 underline underline-offset-4 transition-colors hover:text-black"
+              >
+                Termos de Serviço
+              </Link>{" "}
+              e{" "}
+              <Link
+                href="/privacy"
+                className="text-gray-700 underline underline-offset-4 transition-colors hover:text-black"
+              >
+                Política de Privacidade
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Right side - Black with logo */}
+      <div className="relative hidden w-1/2 overflow-hidden rounded-l-[3rem] bg-black lg:order-2 lg:flex lg:flex-col lg:px-16 lg:py-16">
         {/* Bottom light effect */}
         <div className="absolute right-0 bottom-0 left-0 h-96 bg-gradient-to-t from-white/6 via-transparent to-transparent" />
         <div className="absolute bottom-0 left-1/2 h-64 w-80 -translate-x-1/2 rounded-full bg-gradient-to-t from-white/10 via-white/5 to-transparent blur-3xl" />
 
-        {/* Decorative image on the right */}
-        <div className="absolute top-1/2 right-0 -translate-y-1/2">
+        {/* Decorative image on the left */}
+        <div className="absolute top-1/2 left-0 -translate-y-1/2">
           <img
             src="https://jsfyfqlmzqkaxjfkmpxw.supabase.co/storage/v1/object/public/assets/auth_line_decoration.svg"
             alt=""
-            className="h-auto w-auto opacity-50"
+            className="h-auto w-auto scale-x-[-1] opacity-50"
           />
         </div>
 
         {/* Logo */}
-        <div className="relative z-20">
+        <div className="relative z-20 flex justify-end">
           <img
             src="https://jsfyfqlmzqkaxjfkmpxw.supabase.co/storage/v1/object/public/assets/logo_fin_dark_mode.svg"
             alt="Logo"
@@ -239,78 +311,6 @@ export default function AuthenticationPage() {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right side - White with form */}
-      <div className="relative flex w-full flex-1 items-center justify-center bg-white p-8 lg:w-1/2 lg:px-16 lg:py-16">
-        {/* Top right login link - Desktop only */}
-        <div className="absolute top-16 right-16 hidden lg:block">
-          <p className="text-sm font-light text-gray-600">
-            Tem uma conta?{" "}
-            <Link
-              href="/auth/login"
-              className="font-normal text-black underline underline-offset-4 transition-colors hover:text-gray-700"
-            >
-              Entrar
-            </Link>
-          </p>
-        </div>
-
-        <div className="w-full max-w-md">
-          <div
-            className={`transition-all duration-700 ${
-              showContent
-                ? "translate-y-0 opacity-100"
-                : "translate-y-4 opacity-0"
-            }`}
-          >
-            {/* Header */}
-            <div className="mb-8 text-center">
-              <h1
-                className="mb-4 text-4xl font-light tracking-tight text-black"
-                style={{
-                  fontFamily:
-                    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                  fontWeight: 400,
-                }}
-              >
-                Criar uma conta
-              </h1>
-              <p
-                className="text-base font-light text-gray-600"
-                style={{
-                  fontFamily:
-                    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                  fontWeight: 300,
-                }}
-              >
-                Crie sua conta com email e senha
-              </p>
-            </div>
-
-            {/* Auth Form */}
-            <UserAuthForm />
-
-            {/* Terms */}
-            <p className="mt-8 text-center text-sm font-light text-gray-500">
-              Ao continuar, você concorda com nossos{" "}
-              <Link
-                href="/terms"
-                className="text-gray-700 underline underline-offset-4 transition-colors hover:text-black"
-              >
-                Termos de Serviço
-              </Link>{" "}
-              e{" "}
-              <Link
-                href="/privacy"
-                className="text-gray-700 underline underline-offset-4 transition-colors hover:text-black"
-              >
-                Política de Privacidade
-              </Link>
-              .
-            </p>
           </div>
         </div>
       </div>

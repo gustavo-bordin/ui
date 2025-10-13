@@ -18,11 +18,11 @@ export default function OnboardingPage() {
       return
     }
 
-    // If no user after loading, redirect to auth
+    // If no user after loading, redirect to login
     if (!user) {
       // Add a small delay to prevent rapid redirects
       const timeoutId = setTimeout(() => {
-        router.push("/auth")
+        router.push("/auth/login")
       }, 500)
 
       return () => clearTimeout(timeoutId)

@@ -1,4 +1,8 @@
+"use client"
+
+import * as React from "react"
 import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -10,6 +14,17 @@ import {
 } from "@/components/ui/card"
 
 export default function HomePage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  React.useEffect(() => {
+    // If there's a code parameter, redirect to auth callback
+    const code = searchParams.get("code")
+    if (code) {
+      router.push(`/auth/callback?code=${code}`)
+    }
+  }, [searchParams, router])
+
   return (
     <div className="bg-background flex min-h-screen items-center justify-center">
       <div className="container mx-auto px-4">
@@ -29,7 +44,7 @@ export default function HomePage() {
               <Link href="/dashboard">Go to Dashboard</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href="/auth">Authentication</Link>
+              <Link href="/auth/login">Authentication</Link>
             </Button>
           </div>
 
@@ -58,7 +73,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <Button asChild variant="outline" className="w-full">
-                  <Link href="/auth">Sign In</Link>
+                  <Link href="/auth/login">Sign In</Link>
                 </Button>
               </CardContent>
             </Card>

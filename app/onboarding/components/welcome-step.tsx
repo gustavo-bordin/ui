@@ -10,9 +10,10 @@ interface WelcomeStepProps {
   userId: string
   onComplete: () => void
   onSkip: () => void
+  onBack?: () => void
 }
 
-export function WelcomeStep({ onComplete }: WelcomeStepProps) {
+export function WelcomeStep({ userId, onComplete }: WelcomeStepProps) {
   const { user } = useAuth()
   const [showContent, setShowContent] = React.useState(false)
   const [showButton, setShowButton] = React.useState(false)
@@ -20,7 +21,7 @@ export function WelcomeStep({ onComplete }: WelcomeStepProps) {
   React.useEffect(() => {
     // Animate welcome message
     const timer1 = setTimeout(() => setShowContent(true), 500)
-    const timer2 = setTimeout(() => setShowButton(true), 2000)
+    const timer2 = setTimeout(() => setShowButton(true), 1000)
 
     return () => {
       clearTimeout(timer1)
@@ -33,6 +34,23 @@ export function WelcomeStep({ onComplete }: WelcomeStepProps) {
     user?.user_metadata?.name ||
     user?.email?.split("@")[0] ||
     "Usuário"
+
+  const handleComplete = async () => {
+    try {
+      // Update current_step to 2 (step 1 completed, moving to step 2)
+      await fetch("/api/onboarding/step", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, step: 2 }),
+      })
+    } catch (error) {
+      console.error("Error updating step:", error)
+      // Continue anyway, don't block the user
+    }
+    onComplete()
+  }
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">
@@ -93,12 +111,12 @@ export function WelcomeStep({ onComplete }: WelcomeStepProps) {
 
         {/* CTA Button */}
         <div
-          className={`mt-12 transition-all delay-700 duration-1000 ${
+          className={`mt-12 transition-all delay-300 duration-1000 ${
             showButton ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
           <Button
-            onClick={onComplete}
+            onClick={handleComplete}
             size="lg"
             className="rounded-2xl border border-white/20 bg-white/10 px-8 py-4 text-lg font-light text-white shadow-xl backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:shadow-2xl"
             style={{

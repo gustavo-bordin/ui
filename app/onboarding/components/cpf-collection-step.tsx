@@ -9,20 +9,20 @@ import { Input } from "@/components/ui/input"
 interface CpfCollectionStepProps {
   userId: string
   onComplete: () => void
-  onSkip: () => void
+  onBack: () => void
 }
 
 // CPF validation function
 const validateCPF = (cpf: string): boolean => {
   // Remove all non-digits
   const cleanCpf = cpf.replace(/\D/g, "")
-  
+
   // Check if has 11 digits
   if (cleanCpf.length !== 11) return false
-  
+
   // Check for known invalid patterns
   if (/^(\d)\1{10}$/.test(cleanCpf)) return false
-  
+
   // Validate check digits
   let sum = 0
   for (let i = 0; i < 9; i++) {
@@ -31,7 +31,7 @@ const validateCPF = (cpf: string): boolean => {
   let remainder = (sum * 10) % 11
   if (remainder === 10 || remainder === 11) remainder = 0
   if (remainder !== parseInt(cleanCpf.charAt(9))) return false
-  
+
   sum = 0
   for (let i = 0; i < 10; i++) {
     sum += parseInt(cleanCpf.charAt(i)) * (11 - i)
@@ -39,14 +39,14 @@ const validateCPF = (cpf: string): boolean => {
   remainder = (sum * 10) % 11
   if (remainder === 10 || remainder === 11) remainder = 0
   if (remainder !== parseInt(cleanCpf.charAt(10))) return false
-  
+
   return true
 }
 
 // CPF formatting function
 const formatCPF = (value: string): string => {
   const cleanValue = value.replace(/\D/g, "")
-  
+
   if (cleanValue.length <= 3) {
     return cleanValue
   } else if (cleanValue.length <= 6) {
@@ -61,7 +61,7 @@ const formatCPF = (value: string): string => {
 export function CpfCollectionStep({
   userId,
   onComplete,
-  onSkip,
+  onBack,
 }: CpfCollectionStepProps) {
   const [cpf, setCpf] = React.useState("")
   const [isValid, setIsValid] = React.useState(false)
@@ -95,7 +95,7 @@ export function CpfCollectionStep({
 
     try {
       const cleanCpf = cpf.replace(/\D/g, "")
-      
+
       const response = await fetch("/api/onboarding/cpf", {
         method: "POST",
         headers: {
@@ -112,15 +112,20 @@ export function CpfCollectionStep({
         console.error("CPF API Error:", {
           status: response.status,
           statusText: response.statusText,
-          errorData
+          errorData,
         })
-        throw new Error(errorData.error || `Erro ao salvar CPF (${response.status}: ${response.statusText})`)
+        throw new Error(
+          errorData.error ||
+            `Erro ao salvar CPF (${response.status}: ${response.statusText})`
+        )
       }
 
       onComplete()
     } catch (error) {
       console.error("Error saving CPF:", error)
-      setError(error instanceof Error ? error.message : "Erro interno do servidor")
+      setError(
+        error instanceof Error ? error.message : "Erro interno do servidor"
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -144,8 +149,9 @@ export function CpfCollectionStep({
           <h2 className="mb-6 text-2xl leading-tight font-light text-white">
             Informe seu CPF
           </h2>
-          <p className="text-sm text-gray-400 leading-relaxed">
-            Precisamos do seu CPF para conectar com o Open Finance e acessar suas informações bancárias de forma segura.
+          <p className="text-sm leading-relaxed text-gray-400">
+            Precisamos do seu CPF para conectar com o Open Finance e acessar
+            suas informações bancárias de forma segura.
           </p>
         </div>
 
@@ -165,16 +171,14 @@ export function CpfCollectionStep({
                 value={cpf}
                 onChange={handleCpfChange}
                 maxLength={14}
-                className="h-14 rounded-2xl border border-white/20 bg-white/10 px-6 text-white placeholder:text-gray-400 backdrop-blur-sm transition-all duration-300 focus:border-white/40 focus:bg-white/15 focus:ring-0"
+                className="h-14 rounded-2xl border border-white/20 bg-white/10 px-6 text-white backdrop-blur-sm transition-all duration-300 placeholder:text-gray-400 focus:border-white/40 focus:bg-white/15 focus:ring-0"
               />
               {cpf && isValid && (
-                <CheckCircle className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-green-400" />
+                <CheckCircle className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 text-green-400" />
               )}
             </div>
-            
-            {error && (
-              <p className="text-sm text-red-400">{error}</p>
-            )}
+
+            {error && <p className="text-sm text-red-400">{error}</p>}
           </div>
         </div>
 
@@ -193,8 +197,8 @@ export function CpfCollectionStep({
                 Seus dados estão protegidos
               </h4>
               <p className="mt-1 text-xs text-gray-400">
-                Seu CPF é criptografado e usado apenas para autenticação no Open Finance. 
-                Seguimos todas as normas de segurança do Banco Central.
+                Seu CPF é criptografado e usado apenas para autenticação no Open
+                Finance. Seguimos todas as normas de segurança do Banco Central.
               </p>
             </div>
           </div>
@@ -209,10 +213,10 @@ export function CpfCollectionStep({
           }`}
         >
           <button
-            onClick={onSkip}
+            onClick={onBack}
             className="text-sm text-gray-400 transition-colors hover:text-white"
           >
-            Pular por agora
+            Voltar
           </button>
 
           <Button

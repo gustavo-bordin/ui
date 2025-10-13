@@ -11,7 +11,7 @@ export default function AuthCodeError() {
           There was an error with your authentication. Please try again.
         </p>
         <Button asChild>
-          <Link href="/auth">Try Again</Link>
+          <Link href="/auth/login">Try Again</Link>
         </Button>
       </div>
     </div>

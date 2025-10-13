@@ -9,6 +9,8 @@ interface UserGoalsStepProps {
   userId: string
   onComplete: () => void
   onSkip: () => void
+  onBack?: () => void
+  startAtLastQuestion?: boolean
 }
 
 const QUESTIONS = [
@@ -84,8 +86,11 @@ export function UserGoalsStep({
   userId,
   onComplete,
   onSkip,
+  startAtLastQuestion = false,
 }: UserGoalsStepProps) {
-  const [currentQuestion, setCurrentQuestion] = React.useState(0)
+  const [currentQuestion, setCurrentQuestion] = React.useState(
+    startAtLastQuestion ? QUESTIONS.length - 1 : 0
+  )
   const [answers, setAnswers] = React.useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = React.useState(false)
   const [showContent, setShowContent] = React.useState(false)

@@ -13,13 +13,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
-    // Update user onboarding status
+    // Update user onboarding status and current_step to 5 (step 4 completed, onboarding done)
     const { data, error } = await supabase.from("user_onboarding").upsert({
       user_id: userId,
       openfinance_connected: connected,
       connection_date: connected ? new Date().toISOString() : null,
+      current_step: 5,
       updated_at: new Date().toISOString(),
     })
 

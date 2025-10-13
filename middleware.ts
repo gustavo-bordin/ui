@@ -37,12 +37,28 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protected routes
-  if (request.nextUrl.pathname.startsWith("/dashboard") && !user) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone()
-    url.pathname = "/auth"
-    return NextResponse.redirect(url)
+  // Protected routes - Dashboard requires authentication
+  if (request.nextUrl.pathname.startsWith("/dashboard")) {
+    if (!user) {
+      // No user, redirect to login page
+      const url = request.nextUrl.clone()
+      url.pathname = "/auth/login"
+      return NextResponse.redirect(url)
+    }
+
+    // Check if user has completed onboarding
+    const { data: onboardingData } = await supabase
+      .from("user_onboarding")
+      .select("has_completed_onboarding")
+      .eq("user_id", user.id)
+      .maybeSingle()
+
+    // If user hasn't completed onboarding, redirect to onboarding
+    if (!onboardingData || !onboardingData.has_completed_onboarding) {
+      const url = request.nextUrl.clone()
+      url.pathname = "/onboarding"
+      return NextResponse.redirect(url)
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 
 import { createClient } from "@/lib/supabase-client"
 import { cn } from "@/lib/utils"
@@ -9,81 +8,47 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function UserAuthForm({
+export function UserLoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [name, setName] = React.useState<string>("")
   const [email, setEmail] = React.useState<string>("")
   const [password, setPassword] = React.useState<string>("")
-  const [isPasswordFocused, setIsPasswordFocused] =
-    React.useState<boolean>(false)
   const [error, setError] = React.useState<string>("")
   const supabase = createClient()
-
-  const passwordRules = {
-    minLength: password.length >= 12,
-    hasLettersNumbersSpecialChars:
-      /[a-zA-Z]/.test(password) &&
-      /\d/.test(password) &&
-      /[^a-zA-Z0-9]/.test(password),
-  }
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
     setIsLoading(true)
     setError("")
 
-    // Validate password length
-    if (password.length < 12) {
-      setError("A senha deve ter pelo menos 12 caracteres")
-      setIsLoading(false)
-      return
-    }
-
-    // Validate password has letters, numbers, and special characters
-    if (!passwordRules.hasLettersNumbersSpecialChars) {
-      setError("A senha deve conter letras, números e caracteres especiais")
-      setIsLoading(false)
-      return
-    }
-
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
-        options: {
-          data: {
-            name: name,
-          },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
       })
 
       if (error) {
-        // Check if the error is about existing user
+        // Translate common error messages to Portuguese
+        let errorMessage = error.message
         if (
-          error.message.toLowerCase().includes("already registered") ||
-          error.message.toLowerCase().includes("user already exists") ||
-          error.message.toLowerCase().includes("email already")
+          error.message.toLowerCase().includes("invalid login credentials") ||
+          error.message.toLowerCase().includes("invalid credentials")
         ) {
-          setError("Uma conta com esse email já existe.")
-        } else {
-          setError(error.message)
+          errorMessage = "Email ou senha incorretos"
+        } else if (
+          error.message.toLowerCase().includes("email not confirmed")
+        ) {
+          errorMessage = "Email não confirmado. Verifique sua caixa de entrada"
+        } else if (error.message.toLowerCase().includes("user not found")) {
+          errorMessage = "Usuário não encontrado"
         }
-        console.error("Erro ao criar conta:", error.message)
-      } else if (
-        data.user &&
-        data.user.identities &&
-        data.user.identities.length === 0
-      ) {
-        // User already exists (Supabase returns empty identities array for existing users)
-        setError("Uma conta com esse email já existe.")
+
+        setError(errorMessage)
       } else {
-        alert(
-          "Conta criada com sucesso! Verifique seu email para confirmar a conta."
-        )
+        // Redirect will be handled by the auth callback
+        window.location.href = "/dashboard"
       }
     } catch (error) {
       console.error("Erro:", error)
@@ -119,32 +84,6 @@ export function UserAuthForm({
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label
-              htmlFor="name"
-              className="text-sm font-normal text-gray-700"
-              style={{
-                fontFamily:
-                  'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                fontWeight: 400,
-              }}
-            >
-              Nome
-            </Label>
-            <Input
-              id="name"
-              placeholder="Como prefere ser chamado"
-              type="text"
-              autoCapitalize="words"
-              autoComplete="name"
-              autoCorrect="off"
-              disabled={isLoading}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="h-12 rounded-2xl border border-gray-300 bg-white px-6 text-black backdrop-blur-sm transition-all duration-300 placeholder:text-gray-400 focus:border-gray-400 focus:ring-0 focus:outline-none"
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label
               htmlFor="email"
               className="text-sm font-normal text-gray-700"
               style={{
@@ -170,58 +109,45 @@ export function UserAuthForm({
             />
           </div>
           <div className="grid gap-2">
-            <Label
-              htmlFor="password"
-              className="text-sm font-normal text-gray-700"
-              style={{
-                fontFamily:
-                  'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                fontWeight: 400,
-              }}
-            >
-              Senha
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="password"
+                className="text-sm font-normal text-gray-700"
+                style={{
+                  fontFamily:
+                    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                  fontWeight: 400,
+                }}
+              >
+                Senha
+              </Label>
+              <a
+                href="/auth/forgot-password"
+                className="text-sm font-normal text-gray-600 transition-colors hover:text-black"
+                style={{
+                  fontFamily:
+                    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                  fontWeight: 400,
+                }}
+              >
+                Esqueceu a senha?
+              </a>
+            </div>
             <Input
               id="password"
-              placeholder="Mínimo 12 caracteres com letras, números e símbolos"
+              placeholder="Sua senha"
               type="password"
-              autoComplete="new-password"
+              autoComplete="current-password"
               disabled={isLoading}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onFocus={() => setIsPasswordFocused(true)}
-              onBlur={() => setIsPasswordFocused(false)}
               required
               className="h-12 rounded-2xl border border-gray-300 bg-white px-6 text-black backdrop-blur-sm transition-all duration-300 placeholder:text-gray-400 focus:border-gray-400 focus:ring-0 focus:outline-none"
             />
-            <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                isPasswordFocused || password.length > 0
-                  ? "max-h-20 opacity-100"
-                  : "max-h-0 opacity-0"
-              }`}
-            >
-              <div className="space-y-1 text-xs">
-                <div
-                  className={`flex items-center gap-2 ${passwordRules.minLength ? "text-green-600" : "text-gray-500"}`}
-                >
-                  <span>{passwordRules.minLength ? "✓" : "○"}</span>
-                  <span>Pelo menos 12 caracteres</span>
-                </div>
-                <div
-                  className={`flex items-center gap-2 ${passwordRules.hasLettersNumbersSpecialChars ? "text-green-600" : "text-gray-500"}`}
-                >
-                  <span>
-                    {passwordRules.hasLettersNumbersSpecialChars ? "✓" : "○"}
-                  </span>
-                  <span>Contém letras, números e caracteres especiais</span>
-                </div>
-              </div>
-            </div>
           </div>
           <Button
             disabled={isLoading}
-            className="mt-2 h-12 cursor-pointer rounded-2xl border border-black/10 bg-black px-6 font-light text-white shadow-lg transition-all duration-300 ease-in-out hover:bg-gray-800 hover:shadow-xl disabled:cursor-not-allowed"
+            className="bg-black/ mt-2 h-12 cursor-pointer rounded-2xl bg-black px-6 font-light text-white transition-all duration-300 ease-in-out hover:bg-black/90 disabled:cursor-not-allowed"
             style={{
               fontFamily:
                 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
@@ -231,24 +157,13 @@ export function UserAuthForm({
             {isLoading && (
               <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
             )}
-            Criar Conta
+            Entrar
           </Button>
         </div>
       </form>
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
           {error}
-          {error === "Uma conta com esse email já existe." && (
-            <>
-              {" "}
-              <Link
-                href="/auth/login"
-                className="font-semibold underline underline-offset-2 hover:text-red-700"
-              >
-                Fazer login
-              </Link>
-            </>
-          )}
         </div>
       )}
       <div className="relative">

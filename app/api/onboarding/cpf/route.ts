@@ -15,17 +15,17 @@ export async function POST(request: NextRequest) {
 
     // Validate CPF format (should be 11 digits)
     if (!/^\d{11}$/.test(cpf)) {
-      return NextResponse.json(
-        { error: "Invalid CPF format" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Invalid CPF format" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify user authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
     if (authError || !user) {
       console.error("Authentication error:", authError)
       return NextResponse.json(
@@ -42,16 +42,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Store CPF in user_onboarding table
-    const { data, error } = await supabase
-      .from("user_onboarding")
-      .upsert({
+    // Store CPF and update current_step to 4 (step 3 completed, moving to step 4)
+    const { data, error } = await supabase.from("user_onboarding").upsert(
+      {
         user_id: userId,
         cpf: cpf,
+        current_step: 4,
         updated_at: new Date().toISOString(),
-      }, {
-        onConflict: 'user_id'
-      })
+      },
+      {
+        onConflict: "user_id",
+      }
+    )
 
     if (error) {
       console.error("Error saving CPF:", error)
@@ -59,7 +61,7 @@ export async function POST(request: NextRequest) {
         code: error.code,
         message: error.message,
         details: error.details,
-        hint: error.hint
+        hint: error.hint,
       })
       return NextResponse.json(
         { error: "Failed to save CPF", details: error.message },
@@ -80,20 +82,20 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const userId = searchParams.get('userId')
+    const userId = searchParams.get("userId")
 
     if (!userId) {
-      return NextResponse.json(
-        { error: "Missing userId" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Missing userId" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify user authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
     if (authError || !user) {
       console.error("Authentication error:", authError)
       return NextResponse.json(
@@ -119,10 +121,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error("Error fetching CPF:", error)
-      return NextResponse.json(
-        { error: "CPF not found" },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "CPF not found" }, { status: 404 })
     }
 
     if (!data?.cpf) {

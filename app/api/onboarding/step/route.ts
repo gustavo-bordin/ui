@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from "next/server"
 
 import { createClient } from "@/lib/supabase-server"
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const userId = searchParams.get("userId")
+    const { userId, step } = await request.json()
 
-    if (!userId) {
-      return NextResponse.json({ error: "Missing userId" }, { status: 400 })
+    if (!userId || typeof step !== "number") {
+      return NextResponse.json(
+        { error: "Missing userId or step" },
+        { status: 400 }
+      )
     }
 
     const supabase = await createClient()
@@ -35,27 +37,29 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Check OpenFinance connection status from user_onboarding table
-    const { data, error } = await supabase
-      .from("user_onboarding")
-      .select("openfinance_connected, connection_date")
-      .eq("user_id", userId)
-      .single()
+    // Update current_step
+    const { data, error } = await supabase.from("user_onboarding").upsert(
+      {
+        user_id: userId,
+        current_step: step,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "user_id",
+      }
+    )
 
     if (error) {
-      console.error("Error fetching connection status:", error)
+      console.error("Error updating step:", error)
       return NextResponse.json(
-        { error: "Failed to check connection status" },
+        { error: "Failed to update step" },
         { status: 500 }
       )
     }
 
-    return NextResponse.json({
-      connected: data?.openfinance_connected || false,
-      connection_date: data?.connection_date,
-    })
+    return NextResponse.json({ success: true, data })
   } catch (error) {
-    console.error("Error in OpenFinance status API:", error)
+    console.error("Error in step API:", error)
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

@@ -10,11 +10,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing userId" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify user authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
     if (authError || !user) {
       console.error("Authentication error:", authError)
       return NextResponse.json(
@@ -35,8 +38,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase.from("user_onboarding").upsert({
       user_id: userId,
       has_completed_onboarding: true,
-      current_step: 4,
-      completed_steps: [1, 2, 3, 4],
+      current_step: 5,
       updated_at: new Date().toISOString(),
     })
 
@@ -46,7 +48,7 @@ export async function POST(request: NextRequest) {
         code: error.code,
         message: error.message,
         details: error.details,
-        hint: error.hint
+        hint: error.hint,
       })
       return NextResponse.json(
         { error: "Failed to complete onboarding", details: error.message },

@@ -46,12 +46,14 @@ export function OnboardingWizard({
 }: OnboardingWizardProps) {
   const [currentStep, setCurrentStep] = React.useState(1)
   const [completedSteps, setCompletedSteps] = React.useState<number[]>([])
+  const [isReturningToGoals, setIsReturningToGoals] = React.useState(false)
   const router = useRouter()
 
   const progress = (currentStep / ONBOARDING_STEPS.length) * 100
 
   const handleStepComplete = (stepId: number) => {
     setCompletedSteps((prev) => [...prev, stepId])
+    setIsReturningToGoals(false) // Reset when moving forward
 
     if (stepId < ONBOARDING_STEPS.length) {
       setCurrentStep(stepId + 1)
@@ -77,9 +79,11 @@ export function OnboardingWizard({
         console.error("API Error:", {
           status: response.status,
           statusText: response.statusText,
-          error: errorData
+          error: errorData,
         })
-        throw new Error(`Failed to mark onboarding complete: ${errorData.error || response.statusText}`)
+        throw new Error(
+          `Failed to mark onboarding complete: ${errorData.error || response.statusText}`
+        )
       }
 
       const result = await response.json()
@@ -100,11 +104,20 @@ export function OnboardingWizard({
     }
   }
 
+  const handleBack = () => {
+    if (currentStep > 1) {
+      // If going back to step 2 (User Goals), mark it so it starts at last question
+      if (currentStep === 3) {
+        setIsReturningToGoals(true)
+      }
+      setCurrentStep(currentStep - 1)
+    }
+  }
+
   const currentStepData = ONBOARDING_STEPS.find(
     (step) => step.id === currentStep
   )
   const CurrentComponent = currentStepData?.component
-
 
   return (
     <div className="bg-background min-h-screen">
@@ -114,6 +127,8 @@ export function OnboardingWizard({
           userId={userId}
           onComplete={() => handleStepComplete(currentStep)}
           onSkip={handleSkip}
+          onBack={handleBack}
+          startAtLastQuestion={currentStep === 2 && isReturningToGoals}
         />
       )}
     </div>
