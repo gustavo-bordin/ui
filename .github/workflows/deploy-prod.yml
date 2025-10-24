@@ -1,0 +1,14 @@
+name: "Deploy to Production"
+
+on: ["push"]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    with:
+      aws-assume-role-arn: "arn:aws:iam::462425944260:role/github-actions-pipeline"
+      aws-region: "sa-east-1"

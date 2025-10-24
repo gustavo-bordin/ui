@@ -1,12 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { Button } from "@/fin/ui/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/fin/ui/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 import { CheckIcon, ClipboardIcon } from "lucide-react"
 
 import { Event, trackEvent } from "@/lib/events"

@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { NavMain } from "@/fin/ui/app/dashboard/components/nav-main"
-import { NavSecondary } from "@/fin/ui/app/dashboard/components/nav-secondary"
-import { NavUser } from "@/fin/ui/app/dashboard/components/nav-user"
+import { NavMain } from "@/app/dashboard/components/nav-main"
+import { NavSecondary } from "@/app/dashboard/components/nav-secondary"
+import { NavUser } from "@/app/dashboard/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -12,7 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/fin/ui/components/ui/sidebar"
+} from "@/components/ui/sidebar"
 import {
   IconBuildingBank,
   IconInnerShadowTop,

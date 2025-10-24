@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { UserAuthForm } from "@/fin/ui/components/user-auth-form"
+import { UserAuthForm } from "@/components/user-auth-form"
 import { BarChart3, Shield, Zap } from "lucide-react"
 
 const testimonials = [

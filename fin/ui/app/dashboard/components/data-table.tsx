@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { Badge } from "@/fin/ui/components/ui/badge"
-import { Button } from "@/fin/ui/components/ui/button"
-import { ChartConfig } from "@/fin/ui/components/ui/chart"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { ChartConfig } from "@/components/ui/chart"
 import {
   Drawer,
   DrawerClose,
@@ -13,7 +13,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/fin/ui/components/ui/drawer"
+} from "@/components/ui/drawer"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -21,17 +21,17 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/fin/ui/components/ui/dropdown-menu"
-import { Input } from "@/fin/ui/components/ui/input"
-import { Label } from "@/fin/ui/components/ui/label"
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/fin/ui/components/ui/select"
-import { Separator } from "@/fin/ui/components/ui/separator"
+} from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
 import {
   Table,
   TableBody,
@@ -39,13 +39,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/fin/ui/components/ui/table"
+} from "@/components/ui/table"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/fin/ui/components/ui/tabs"
+} from "@/components/ui/tabs"
 import {
   IconArrowDown,
   IconArrowUp,

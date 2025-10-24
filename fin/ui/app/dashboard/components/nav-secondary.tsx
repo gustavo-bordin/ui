@@ -7,7 +7,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/fin/ui/components/ui/sidebar"
+} from "@/components/ui/sidebar"
 import { type Icon } from "@tabler/icons-react"
 import { useTheme } from "next-themes"
 

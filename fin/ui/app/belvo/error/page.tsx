@@ -2,15 +2,15 @@
 
 import * as React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Alert, AlertDescription } from "@/fin/ui/components/ui/alert"
-import { Button } from "@/fin/ui/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/fin/ui/components/ui/card"
+} from "@/components/ui/card"
 import { AlertCircle, ArrowLeft, Mail, RefreshCw } from "lucide-react"
 
 export default function BelvoErrorPage() {

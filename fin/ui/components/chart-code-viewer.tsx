@@ -1,9 +1,9 @@
 import * as React from "react"
-import { ChartCopyButton } from "@/fin/ui/components/chart-copy-button"
-import { Chart } from "@/fin/ui/components/chart-display"
-import { getIconForLanguageExtension } from "@/fin/ui/components/icons"
-import { OpenInV0Button } from "@/fin/ui/components/open-in-v0-button"
-import { Button } from "@/fin/ui/components/ui/button"
+import { ChartCopyButton } from "@/components/chart-copy-button"
+import { Chart } from "@/components/chart-display"
+import { getIconForLanguageExtension } from "@/components/icons"
+import { OpenInV0Button } from "@/components/open-in-v0-button"
+import { Button } from "@/components/ui/button"
 import {
   Drawer,
   DrawerContent,
@@ -11,7 +11,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/fin/ui/components/ui/drawer"
+} from "@/components/ui/drawer"
 import {
   Sheet,
   SheetContent,
@@ -19,7 +19,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/fin/ui/components/ui/sheet"
+} from "@/components/ui/sheet"
 
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"

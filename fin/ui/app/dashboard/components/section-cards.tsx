@@ -1,4 +1,4 @@
-import { Badge } from "@/fin/ui/components/ui/badge"
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardAction,
@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/fin/ui/components/ui/card"
+} from "@/components/ui/card"
 import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
 
 export function SectionCards() {

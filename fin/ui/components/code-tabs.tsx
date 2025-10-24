@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Tabs } from "@/fin/ui/components/ui/tabs"
+import { Tabs } from "@/components/ui/tabs"
 
 import { useConfig } from "@/hooks/use-config"
 

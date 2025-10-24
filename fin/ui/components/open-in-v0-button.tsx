@@ -1,5 +1,5 @@
-import { Icons } from "@/fin/ui/components/icons"
-import { Button } from "@/fin/ui/components/ui/button"
+import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
 
 import { cn } from "@/lib/utils"
 

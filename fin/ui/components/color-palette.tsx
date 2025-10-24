@@ -1,5 +1,5 @@
-import { Color } from "@/fin/ui/components/color"
-import { ColorFormatSelector } from "@/fin/ui/components/color-format-selector"
+import { Color } from "@/components/color"
+import { ColorFormatSelector } from "@/components/color-format-selector"
 
 import { type ColorPalette } from "@/lib/colors"
 

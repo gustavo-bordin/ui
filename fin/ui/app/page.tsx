@@ -3,14 +3,14 @@
 import * as React from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Button } from "@/fin/ui/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/fin/ui/components/ui/card"
+} from "@/components/ui/card"
 
 export default function HomePage() {
   const router = useRouter()

@@ -1,6 +1,6 @@
 import * as React from "react"
-import { BlockViewer } from "@/fin/ui/components/block-viewer"
-import { ComponentPreview } from "@/fin/ui/components/component-preview"
+import { BlockViewer } from "@/components/block-viewer"
+import { ComponentPreview } from "@/components/component-preview"
 import { registryItemFileSchema } from "shadcn/schema"
 import { z } from "zod"
 

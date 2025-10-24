@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Button } from "@/fin/ui/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { GalleryHorizontalIcon } from "lucide-react"
 
 import { trackEvent } from "@/lib/events"

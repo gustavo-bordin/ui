@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Label } from "@/fin/ui/components/ui/label"
+import { Label } from "@/components/ui/label"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
 import {

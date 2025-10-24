@@ -3,12 +3,12 @@
 import * as React from "react"
 import Link, { LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
-import { Button } from "@/fin/ui/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/fin/ui/components/ui/popover"
+} from "@/components/ui/popover"
 
 import { showMcpDocs } from "@/lib/flags"
 import { cn } from "@/lib/utils"

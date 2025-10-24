@@ -1,9 +1,9 @@
 "use client"
 
-import { ChartCodeViewer } from "@/fin/ui/components/chart-code-viewer"
-import { ChartCopyButton } from "@/fin/ui/components/chart-copy-button"
-import { Chart } from "@/fin/ui/components/chart-display"
-import { Separator } from "@/fin/ui/components/ui/separator"
+import { ChartCodeViewer } from "@/components/chart-code-viewer"
+import { ChartCopyButton } from "@/components/chart-copy-button"
+import { Chart } from "@/components/chart-display"
+import { Separator } from "@/components/ui/separator"
 import {
   AreaChartIcon,
   BarChartBigIcon,

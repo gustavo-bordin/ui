@@ -1,9 +1,9 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import * as React from "react"
-import { CodeCollapsibleWrapper } from "@/fin/ui/components/code-collapsible-wrapper"
-import { CopyButton } from "@/fin/ui/components/copy-button"
-import { getIconForLanguageExtension } from "@/fin/ui/components/icons"
+import { CodeCollapsibleWrapper } from "@/components/code-collapsible-wrapper"
+import { CopyButton } from "@/components/copy-button"
+import { getIconForLanguageExtension } from "@/components/icons"
 
 import { highlightCode } from "@/lib/highlight-code"
 import { getRegistryItem } from "@/lib/registry"

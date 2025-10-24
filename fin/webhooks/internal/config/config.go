@@ -1,22 +1,14 @@
 package config
 
 import (
-	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	Server   ServerConfig
 	Belvo    BelvoConfig
 	Supabase SupabaseConfig
-	Logging  LoggingConfig
-}
-
-type ServerConfig struct {
-	Port string
 }
 
 type BelvoConfig struct {
@@ -26,73 +18,34 @@ type BelvoConfig struct {
 }
 
 type SupabaseConfig struct {
-	URL string
-	Key string
+	URL            string
+	PublishableKey string
 }
 
-type LoggingConfig struct {
-	Level string
-}
-
-// Load reads configuration from environment variables
 func Load() (*Config, error) {
-	// Try to load .env file (optional in production)
-	_ = godotenv.Load()
-
-	config := &Config{
-		Server: ServerConfig{
-			Port: getEnv("PORT", "8080"),
-		},
-		Belvo: BelvoConfig{
-			SecretID:       getEnv("BELVO_SECRET_ID", ""),
-			SecretPassword: getEnv("BELVO_SECRET_PASSWORD", ""),
-			APIURL:         getEnv("BELVO_API_URL", "https://sandbox.belvo.com/api"),
-		},
-		Supabase: SupabaseConfig{
-			URL: getEnv("SUPABASE_URL", ""),
-			Key: getEnv("SUPABASE_KEY", ""),
-		},
-		Logging: LoggingConfig{
-			Level: getEnv("LOG_LEVEL", "info"),
-		},
+	err := godotenv.Load()
+	if err != nil {
+		return nil, err
 	}
 
-	if err := config.Validate(); err != nil {
-		return nil, err
+	belvoSecretId := os.Getenv("BELVO_SECRET_ID")
+	belvoSecretPassword := os.Getenv("BELVO_SECRET_PASSWORD")
+	belvoApiUrl := os.Getenv("BELVO_API_URL")
+
+	supabaseUrl := os.Getenv("SUPABASE_URL")
+	supabasePublishableKey := os.Getenv("SUPABASE_PUBLISHABLE_KEY")
+
+	config := &Config{
+		Belvo: BelvoConfig{
+			SecretID:       belvoSecretId,
+			SecretPassword: belvoSecretPassword,
+			APIURL:         belvoApiUrl,
+		},
+		Supabase: SupabaseConfig{
+			URL:            supabaseUrl,
+			PublishableKey: supabasePublishableKey,
+		},
 	}
 
 	return config, nil
 }
-
-// Validate ensures all required configuration is present
-func (c *Config) Validate() error {
-	if c.Belvo.SecretID == "" {
-		return fmt.Errorf("BELVO_SECRET_ID is required")
-	}
-	if c.Belvo.SecretPassword == "" {
-		return fmt.Errorf("BELVO_SECRET_PASSWORD is required")
-	}
-	if c.Supabase.URL == "" {
-		return fmt.Errorf("SUPABASE_URL is required")
-	}
-	if c.Supabase.Key == "" {
-		return fmt.Errorf("SUPABASE_KEY is required")
-	}
-	return nil
-}
-
-func getEnv(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return defaultValue
-}
-
-func getEnvAsInt(key string, defaultValue int) int {
-	valueStr := getEnv(key, "")
-	if value, err := strconv.Atoi(valueStr); err == nil {
-		return value
-	}
-	return defaultValue
-}
-

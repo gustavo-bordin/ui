@@ -1,8 +1,8 @@
 import * as React from "react"
 import Link from "next/link"
-import { Icons } from "@/fin/ui/components/icons"
-import { Button } from "@/fin/ui/components/ui/button"
-import { Skeleton } from "@/fin/ui/components/ui/skeleton"
+import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { siteConfig } from "@/lib/config"
 

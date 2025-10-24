@@ -1,10 +1,10 @@
 "use client"
 
 import * as React from "react"
-import { useThemeConfig } from "@/fin/ui/components/active-theme"
-import { copyToClipboardWithMeta } from "@/fin/ui/components/copy-button"
-import { Icons } from "@/fin/ui/components/icons"
-import { Button } from "@/fin/ui/components/ui/button"
+import { useThemeConfig } from "@/components/active-theme"
+import { copyToClipboardWithMeta } from "@/components/copy-button"
+import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/fin/ui/components/ui/dialog"
+} from "@/components/ui/dialog"
 import {
   Drawer,
   DrawerContent,
@@ -20,9 +20,9 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/fin/ui/components/ui/drawer"
-import { Label } from "@/fin/ui/components/ui/label"
-import { ScrollArea, ScrollBar } from "@/fin/ui/components/ui/scroll-area"
+} from "@/components/ui/drawer"
+import { Label } from "@/components/ui/label"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
@@ -30,13 +30,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/fin/ui/components/ui/select"
+} from "@/components/ui/select"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/fin/ui/components/ui/tabs"
+} from "@/components/ui/tabs"
 import template from "lodash/template"
 import { CheckIcon, ClipboardIcon } from "lucide-react"
 

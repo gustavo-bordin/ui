@@ -3,20 +3,20 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { getIconForLanguageExtension } from "@/fin/ui/components/icons"
-import { OpenInV0Button } from "@/fin/ui/components/open-in-v0-button"
-import { Button } from "@/fin/ui/components/ui/button"
+import { getIconForLanguageExtension } from "@/components/icons"
+import { OpenInV0Button } from "@/components/open-in-v0-button"
+import { Button } from "@/components/ui/button"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/fin/ui/components/ui/collapsible"
+} from "@/components/ui/collapsible"
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/fin/ui/components/ui/resizable"
-import { Separator } from "@/fin/ui/components/ui/separator"
+} from "@/components/ui/resizable"
+import { Separator } from "@/components/ui/separator"
 import {
   Sidebar,
   SidebarGroup,
@@ -27,12 +27,12 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarProvider,
-} from "@/fin/ui/components/ui/sidebar"
-import { Tabs, TabsList, TabsTrigger } from "@/fin/ui/components/ui/tabs"
+} from "@/components/ui/sidebar"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@/fin/ui/components/ui/toggle-group"
+} from "@/components/ui/toggle-group"
 import {
   Check,
   ChevronRight,

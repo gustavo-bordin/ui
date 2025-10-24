@@ -1,9 +1,9 @@
-import { CategoryDonutChart } from "@/fin/ui/app/dashboard/components/category-donut-chart"
-import { ChartAreaInteractive } from "@/fin/ui/app/dashboard/components/chart-area-interactive"
-import { CounterpartyDonutChart } from "@/fin/ui/app/dashboard/components/counterparty-donut-chart"
-import { DataTable } from "@/fin/ui/app/dashboard/components/data-table"
-import { OperationDonutChart } from "@/fin/ui/app/dashboard/components/operation-donut-chart"
-import { SectionCards } from "@/fin/ui/app/dashboard/components/section-cards"
+import { CategoryDonutChart } from "@/app/dashboard/components/category-donut-chart"
+import { ChartAreaInteractive } from "@/app/dashboard/components/chart-area-interactive"
+import { CounterpartyDonutChart } from "@/app/dashboard/components/counterparty-donut-chart"
+import { DataTable } from "@/app/dashboard/components/data-table"
+import { OperationDonutChart } from "@/app/dashboard/components/operation-donut-chart"
+import { SectionCards } from "@/app/dashboard/components/section-cards"
 
 import data from "@/app/dashboard/data.json"
 

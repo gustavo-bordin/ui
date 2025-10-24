@@ -1,13 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { Button } from "@/fin/ui/components/ui/button"
-import { Calendar } from "@/fin/ui/components/ui/calendar"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/fin/ui/components/ui/popover"
+} from "@/components/ui/popover"
 import { endOfMonth, format, startOfMonth, subDays } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { CalendarIcon } from "lucide-react"

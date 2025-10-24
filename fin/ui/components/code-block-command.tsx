@@ -1,19 +1,19 @@
 "use client"
 
 import * as React from "react"
-import { copyToClipboardWithMeta } from "@/fin/ui/components/copy-button"
-import { Button } from "@/fin/ui/components/ui/button"
+import { copyToClipboardWithMeta } from "@/components/copy-button"
+import { Button } from "@/components/ui/button"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/fin/ui/components/ui/tabs"
+} from "@/components/ui/tabs"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/fin/ui/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 import { CheckIcon, ClipboardIcon, TerminalIcon } from "lucide-react"
 
 import { useConfig } from "@/hooks/use-config"

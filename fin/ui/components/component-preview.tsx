@@ -1,6 +1,6 @@
 import Image from "next/image"
-import { ComponentPreviewTabs } from "@/fin/ui/components/component-preview-tabs"
-import { ComponentSource } from "@/fin/ui/components/component-source"
+import { ComponentPreviewTabs } from "@/components/component-preview-tabs"
+import { ComponentSource } from "@/components/component-source"
 
 import { Index } from "@/lib/registry-index"
 

@@ -1,11 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { DateRangeSelector } from "@/fin/ui/app/dashboard/components/date-range-selector"
-import { InstitutionSelector } from "@/fin/ui/app/dashboard/components/institution-selector"
-import { ModeToggle } from "@/fin/ui/app/dashboard/components/mode-toggle"
-import { Separator } from "@/fin/ui/components/ui/separator"
-import { SidebarTrigger } from "@/fin/ui/components/ui/sidebar"
+import { DateRangeSelector } from "@/app/dashboard/components/date-range-selector"
+import { InstitutionSelector } from "@/app/dashboard/components/institution-selector"
+import { ModeToggle } from "@/app/dashboard/components/mode-toggle"
+import { Separator } from "@/components/ui/separator"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 interface DateRange {
   from: Date | undefined

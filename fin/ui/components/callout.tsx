@@ -2,7 +2,7 @@ import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from "@/fin/ui/components/ui/alert"
+} from "@/components/ui/alert"
 
 import { cn } from "@/lib/utils"
 

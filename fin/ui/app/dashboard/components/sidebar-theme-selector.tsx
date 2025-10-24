@@ -1,6 +1,6 @@
 "use client"
 
-import { useThemeConfig } from "@/fin/ui/components/active-theme"
+import { useThemeConfig } from "@/components/active-theme"
 import {
   Select,
   SelectContent,
@@ -10,11 +10,11 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/fin/ui/components/ui/select"
+} from "@/components/ui/select"
 import {
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/fin/ui/components/ui/sidebar"
+} from "@/components/ui/sidebar"
 import { IconPalette } from "@tabler/icons-react"
 
 const DEFAULT_THEMES = [

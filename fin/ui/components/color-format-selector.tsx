@@ -6,8 +6,8 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "@/fin/ui/components/ui/select"
-import { Skeleton } from "@/fin/ui/components/ui/skeleton"
+} from "@/components/ui/select"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { getColorFormat, type Color } from "@/lib/colors"
 import { cn } from "@/lib/utils"

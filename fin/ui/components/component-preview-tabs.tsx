@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Tabs, TabsList, TabsTrigger } from "@/fin/ui/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { cn } from "@/lib/utils"
 

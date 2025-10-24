@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { Button } from "@/fin/ui/components/ui/button"
-import { Checkbox } from "@/fin/ui/components/ui/checkbox"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Dialog,
   DialogContent,
@@ -11,12 +11,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/fin/ui/components/ui/dialog"
-import { Label } from "@/fin/ui/components/ui/label"
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@/fin/ui/components/ui/toggle-group"
+} from "@/components/ui/toggle-group"
 import { IconPlus } from "@tabler/icons-react"
 import { Loader2 } from "lucide-react"
 

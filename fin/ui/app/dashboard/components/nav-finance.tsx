@@ -4,7 +4,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/fin/ui/components/ui/collapsible"
+} from "@/components/ui/collapsible"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -15,7 +15,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/fin/ui/components/ui/sidebar"
+} from "@/components/ui/sidebar"
 import { IconChevronRight, type Icon } from "@tabler/icons-react"
 
 export function NavFinance({

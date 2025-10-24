@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { Button } from "@/fin/ui/components/ui/button"
-import { Input } from "@/fin/ui/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { CheckCircle, Loader2, Shield } from "lucide-react"
 
 interface CpfCollectionStepProps {

@@ -8,24 +8,24 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/fin/ui/components/ui/card"
+} from "@/components/ui/card"
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/fin/ui/components/ui/chart"
+} from "@/components/ui/chart"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/fin/ui/components/ui/select"
+} from "@/components/ui/select"
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@/fin/ui/components/ui/toggle-group"
+} from "@/components/ui/toggle-group"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
 import { useIsMobile } from "@/hooks/use-mobile"

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChartToolbar } from "@/fin/ui/components/chart-toolbar"
+import { ChartToolbar } from "@/components/chart-toolbar"
 import { registryItemSchema } from "shadcn/schema"
 import { z } from "zod"
 

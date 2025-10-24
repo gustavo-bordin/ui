@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { copyToClipboardWithMeta } from "@/fin/ui/components/copy-button"
-import { Button } from "@/fin/ui/components/ui/button"
+import { copyToClipboardWithMeta } from "@/components/copy-button"
+import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -11,7 +11,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/fin/ui/components/ui/command"
+} from "@/components/ui/command"
 import {
   Dialog,
   DialogContent,
@@ -19,8 +19,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/fin/ui/components/ui/dialog"
-import { Separator } from "@/fin/ui/components/ui/separator"
+} from "@/components/ui/dialog"
+import { Separator } from "@/components/ui/separator"
 import { type DialogProps } from "@radix-ui/react-dialog"
 import { IconArrowRight } from "@tabler/icons-react"
 import { CornerDownLeftIcon, SquareDashedIcon } from "lucide-react"

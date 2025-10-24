@@ -7,12 +7,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/fin/ui/components/ui/card"
+} from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/fin/ui/components/ui/chart"
+} from "@/components/ui/chart"
 import { Cell, Label, Pie, PieChart } from "recharts"
 import { z } from "zod"
 
